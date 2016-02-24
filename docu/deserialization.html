@@ -1,0 +1,22 @@
+<html>
+<title>Java Deserialization</title>
+<h1>Java Deserialization</h1>
+<p>This module uses the xstream library while the idea has been stolen from the burp plugin JDSer-ng. The reason i integrated it in gunziper has been the need for additional processings which JDSer does not support (in one case, the java objects were additionally gziped and base64 encoded).</p><br>
+<p> As this feature is normally only useful with Request/Response unpacking and the additional view (Match/Replace modifies the requests/responses, which most probably renders the client and/or server application unusable), the following description focuses on these 2 modules.</p><br>
+<p>The principal steps to configure deserialization are the same as described in <a href="reqUnpacking.html">Request Unpacking</a> but differs in the following parts:</p>
+<p>1. The unpacking part should contain the "deserializeJavaObject" processor, like illustrated in the following picture (in this case the serialized java object is additionaly base64 encoded):</p>
+<img src="images/javaDeser-unpackingProcessors.png" />
+<br>
+<p>2. Burpsuite must beneath gunziper also started with 2 additional libraries and the application (e.g. the fat client) containing the class files :</p>
+- xstream<br>
+- kxml2<br>
+- client.jar<br>
+<p>So an example call for burspuite would be the following:</p>
+java -Xms1512m -classpath burpsuite_pro_v1.6.09.jar:/path/to/gunziper_0.9.7alpha.jar:kxml2-2.3.0.jar:xstream-1.4.7.jar:client.jar burp.StartBurp<br>
+<br><br><p>Given the following request with an java serialized object, encoded with base64 and url encoding (this is no typical viewstate):</p>
+<img src="images/javaDeser-request.png" />
+<p>the following configuration:</p>
+<img src="images/javaDeser-settings.png" />
+<p>leads to this result:</p>
+<img src="images/javaDeser-unpackedRequest.png" />
+</html>

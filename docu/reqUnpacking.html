@@ -1,0 +1,59 @@
+<html>
+<title>Request Unpacking</title>
+<h1>Request Unpacking</h1>
+<p>This feature was the starting point of gunziper. It enables you to manual-test requests, where the relevant parts (like parameters and values) are e.g. "hidden" by gzip and base64 encoding (for Java Deserialization, see <a href="deserialization.html">Java Deserialization</a>). It should be noted, that this feature is not intended to be used with Intruder and Scanner, as it just adds an additional view to Proxy and/or Repeater for live modification. For using this feature with Scanner/Intruder see <a href="reqUnpackingIntruder.html">Request (Un)Packing for Intruder/Scanner</a>.<br>
+So the first step would be to send the relevant request to regex test (see <a href="regexTest.html">Regex Test</a>).</p>
+<p> After that, go to the Request Unpacking Tab within the Gunziper Tab and start configuring by activating Request Unpacking:</p>
+<img src="images/reqUnpackingTab.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>The next step is to define, which requests are in scope for unpacking (if you want to apply it for every request, just enter a single dot):</p>
+<img src="images/regexTest_highlightWithoutRegexGroup.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>If the unpacking of the request modifies the part which is used for the scope, just supply here this modified scope regex. Otherwise, just put the same regex as before.</p>
+<img src="images/reqUnpacking_scope.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>If the regex defines requests that are NOT in scope, just activate the corresponding checkboxes and every request NOT matching these regexes is being tried to be unpacked:</p>
+<img src="images/reqUnpacking_invert.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>Now you have to specify, where the string to be unpacked is located, and how it should be unpacked. (NOTE: Regex Groups mark the part to be unpacked.) So in this case, the relevant part is located in the request header within the first parameter named "input", so the regex looks for the Request header and body seperator (\r\n\r\n) and the parameter name (_input) and with the regex group "(.*)" you tell him to unpack everything coming after the parameter:</p>
+<img src="images/regexTest_highlightWithRegexGroup.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>After that, the last step is to tell Request Unpacker, how the relevant part should be unpacked. So if the content is gziped, base64encoded and URL encoded, the following configuration should be fine (the marked part is processed in the order, the processing strings are supplied):</p>
+<img src="images/reqUnpacking_processingStrings.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>So to save the work and get it working, push the "Save settings" button go e.g. to the repeater and look for the gunziper tab (you might have to reissue the request to get it to appear):</p>
+<img src="images/gunziperTabInRepeater.png" />
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>After selecting it, the content should be unpacked:</p>
+<img src="images/gunziperTabInRepeater-Selected.png" />
+
+
+</html>
