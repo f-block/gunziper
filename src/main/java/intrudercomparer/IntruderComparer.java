@@ -18,12 +18,12 @@ import unpacking.UnpackingLibrary;
 import variables.Variables;
 import burp.BurpExtender;
 import burp.IHttpRequestResponse;
-import difflib.diffutils.DiffRow;
-import difflib.diffutils.DiffRowGenerator;
-import difflib.google.diff_match_patch;
-import difflib.google.diff_match_patch.Diff;
 import exceptions.NothingDoneException;
-
+import difflib.DiffRow;
+import difflib.DiffRowGenerator;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Diff;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Operation;
 
 /**
  * This class uses the provided messages and options, prepares the messages
@@ -115,7 +115,7 @@ class IntruderComparer implements Runnable {
         DiffRowGenerator generator = null;
         List<DiffRow> previousRows = null;
         List<DiffRow> firstRows = null;
-        diff_match_patch diffGenerator = null;
+        DiffMatchPatch diffGenerator = null;
         ComparerWindow cw = null;
         List<Diff> previousDiffs = null;
         List<Diff> firstDiffs = null;
@@ -127,7 +127,7 @@ class IntruderComparer implements Runnable {
                 previousResponseString = "";
                 actualResponse = "";
                 firstResponse = "";
-                diffGenerator = new diff_match_patch();
+                diffGenerator = new DiffMatchPatch();
             }
             if (!this.useGoogleDiffForWholeComparison) {
                 previousResponseList = new LinkedList<String>();
@@ -283,23 +283,23 @@ class IntruderComparer implements Runnable {
 
                             if (this.doDifflikeComparisonToFirstResponse
                                     && this.useGoogleDiffForWholeComparison) {
-                                firstDiffs = diffGenerator.diff_main(
+                                firstDiffs = diffGenerator.diffMain(
                                         firstResponse, actualResponse, true);
                                 for (Diff diff:firstDiffs) {
-                                    if (diff.operation != difflib.google.diff_match_patch.Operation.EQUAL) {
+                                    if (diff.operation != Operation.EQUAL) {
                                         differentCharsToFirst += diff.text
                                                 .length();
                                     }
                                 }
                             }
 
-                            previousDiffs = diffGenerator.diff_main(
+                            previousDiffs = diffGenerator.diffMain(
                                     previousResponseString, actualResponse,
                                     true);
 
                             if (this.useGoogleDiffForWholeComparison) {
                                 for (Diff diff:previousDiffs) {
-                                    if (diff.operation != difflib.google.diff_match_patch.Operation.EQUAL) {
+                                    if (diff.operation != Operation.EQUAL) {
                                         differentCharsToPrevious += diff.text
                                                 .length();
                                     }

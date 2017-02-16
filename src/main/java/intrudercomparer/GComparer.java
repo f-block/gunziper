@@ -16,9 +16,9 @@ import javax.swing.JFrame;
 import misc.DisplayText;
 import misc.Library;
 import burp.IHttpRequestResponse;
-import difflib.google.diff_match_patch;
-import difflib.google.diff_match_patch.Diff;
-import difflib.google.diff_match_patch.Operation;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Diff;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Operation;
 
 
 /**
@@ -54,7 +54,7 @@ public class GComparer implements Runnable {
             boolean isFirstRound = true;
             boolean responsesDiffer = false;
             boolean atLeastOnePairOfResponsesThatDifferFound = false;
-            diff_match_patch diffGenerator = new diff_match_patch();
+            DiffMatchPatch diffGenerator = new DiffMatchPatch();
             ActionListener cancelWholeDifferenceCalculationActionlistener = null;
 
             if (this.messageInfo.length > 2) {
@@ -87,7 +87,7 @@ public class GComparer implements Runnable {
                                     .getResponse());
 
 
-                    previousDiffs = diffGenerator.diff_main(
+                    previousDiffs = diffGenerator.diffMain(
                             previousResponseString, actResponseString, true);
 
                     for (Diff diff:previousDiffs) {

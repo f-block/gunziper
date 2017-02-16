@@ -40,8 +40,9 @@ import misc.Messages;
 import misc.SearchPanel;
 import variables.ComparerWindowSettings;
 import variables.Variables;
-import difflib.google.diff_match_patch.Diff;
-import difflib.google.diff_match_patch.Operation;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Diff;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Operation;
 
 
 class ComparerHighlighter extends DefaultHighlighter.DefaultHighlightPainter {
@@ -205,7 +206,7 @@ public class ComparerWindow extends JFrame {
         int[] jumpToLineIndex = null;
         boolean left = false;
         for (Diff diff:this.diffrows) {
-            if (diff.operation != difflib.google.diff_match_patch.Operation.EQUAL) {
+            if (diff.operation != Operation.EQUAL) {
 
                 if (diff.operation == Operation.DELETE) {
                     left = true;
