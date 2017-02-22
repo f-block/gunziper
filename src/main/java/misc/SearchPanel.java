@@ -84,8 +84,8 @@ public class SearchPanel extends JPanel {
         // super();
         this.explanationString = explanationString;
         this.searchField = new JTextField();
-        this.searchField.setMinimumSize(new Dimension(Integer.MAX_VALUE,
-                this.searchField.getPreferredSize().height));
+//        this.searchField.setMinimumSize(new Dimension(Integer.MIN_VALUE,
+//                this.searchField.getPreferredSize().height));
         this.searchField.setMaximumSize(new Dimension(Integer.MAX_VALUE,
                 this.searchField.getPreferredSize().height));
 

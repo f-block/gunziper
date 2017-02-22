@@ -18,15 +18,6 @@ import docu.HelpPanel;
 
 public class TextFieldsWindow2 extends JTabbedPane implements ITab {
 
-    public static TextFieldsWindow2 getInstance() {
-
-        if (TextFieldsWindow2.instance == null) {
-            TextFieldsWindow2.instance = new TextFieldsWindow2(
-                    BurpExtender.getCallback());
-        }
-        return TextFieldsWindow2.instance;
-    }
-
     final SearchPanel                regexTextfield;
     final JTextField                 replaceStringTextfield;
     final JTextField                 toolnameTextfield;
@@ -96,36 +87,31 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
     final JCheckBox                  activateRuleGloballyCheckbox;
     final JCheckBox                  isextractFromRequestInsteadFromResponseCheckbox;
 
-
     private static TextFieldsWindow2 instance = null;
+
+    public static TextFieldsWindow2 getInstance() {
+        if (TextFieldsWindow2.instance == null) {
+            TextFieldsWindow2.instance = new TextFieldsWindow2(
+                    BurpExtender.getCallback());
+        }
+        return TextFieldsWindow2.instance;
+    }
 
     private TextFieldsWindow2(IBurpExtenderCallbacks callbacks) {
         int textFieldSize = 20;
-        this.regexTextfield = new SearchPanel(null, null, false,
-                Messages.getString("regex"));
+        this.regexTextfield = new SearchPanel(Messages.getString("regex"));
         this.replaceStringTextfield = new JTextField(textFieldSize);
         this.toolnameTextfield = new JTextField(textFieldSize);
         this.responseToolnameTextfield = new JTextField(textFieldSize);
         this.requestToolnameTextfield = new JTextField(textFieldSize);
-        this.responseRelevantRegexTextfield = new SearchPanel(null, null,
-                false, Messages.getString("relevantResponseRegex"));
-        this.requestRelevantRegexTextfield = new SearchPanel(null, null, false,
-                Messages.getString("relevantResquestRegex"));
+        this.responseRelevantRegexTextfield = new SearchPanel(Messages.getString("relevantResponseRegex"));
+        this.requestRelevantRegexTextfield = new SearchPanel(Messages.getString("relevantResquestRegex"));
         this.csvDoing = new ProcessingPanel(FeaturesEnum.REQUEST_UNPACKING);
-
         this.relevantRequestRegexForReplaceResponseExtractionTextfield = new SearchPanel(
-                null,
-                null,
-                false,
                 Messages.getString("relevantRequestRegexForReplaceResponseExtraction"));
-
-        this.relevantReplaceRequestRegexTextfield = new SearchPanel(null, null,
-                false, Messages.getString("relevantReplaceRequestRegex"));
-
+        this.relevantReplaceRequestRegexTextfield = new SearchPanel(
+                Messages.getString("relevantReplaceRequestRegex"));
         this.regexForNewReplaceStringFromResponseExtraction = new SearchPanel(
-                null,
-                null,
-                false,
                 Messages.getString("regexForNewReplaceStringFromResponseExtraction"));
         this.activeReplace = new JCheckBox("Activate Match/Replace rule?");
         this.csvResponseDoing = new ProcessingPanel(
@@ -144,30 +130,17 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         this.activeDebugMode = new JCheckBox("Activate Debug Mode");
         this.numberOfDebugLines = new JTextField(textFieldSize);
         this.dropRequestRegex = new SearchPanel(
-                null,
-                null,
-                false,
                 Messages.getString("a.regex.matching.the.request.that.should.be.dropped"));
         this.isDropRequestActive = new JCheckBox("Drop Proxy Requests");
         this.relevantUnpackedRequestRegexTextfield = new SearchPanel(
-                null,
-                null,
-                false,
                 Messages.getString("a.regex.matching.the.unpacked.request.that.should.be.packed.before.sending"));
         this.regexMarkingRequestpartForUnpackingTextfield = new SearchPanel(
-                null,
-                null,
-                false,
                 Messages.getString("a.regex.marking.the.relevant.part.within.the.request.which.should.be.unpacked"));
         this.regexMarkingResponsepartForUnpackingTextfield = new SearchPanel(
-                null,
-                null,
-                false,
                 Messages.getString("a.regex.marking.the.relevant.part.within.the.response.which.should.be.unpacked"));
         this.languageSelection = new JComboBox<String>(new String[] {"en"});
         this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox = new JComboBox<String>(
                 new String[] {"Regex matches Request", "Regex matches Response"});
-
         this.matchReplaceActionDropdownlist = new JComboBox<String>(
                 new String[] {"Static String", "Number iteration",
                 "Regex response Extraction"});
@@ -175,9 +148,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                 Messages.getString("save.settings"));
         this.loadSettingsButton = new JButton(
                 Messages.getString("load.settings"));
-        // this.regexDropdownListStringTextfield = new
-        // JTextField(textFieldSize);
-        // this.payloadListPathTextfield = new JTextField(textFieldSize);
         this.loadPayloadListButton = new JButton(
                 Messages.getString("load.payloadlist"));
         this.showLicenseStuffButton = new JButton(
@@ -200,9 +170,7 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                 FeaturesEnum.MATCH_REPLACE);
         this.matchReplaceSaveCurrentSettingsButton = new JButton(
                 Messages.getString("save.current.settings"));
-
         this.sessionHandlingActionDelayTextfield = new JTextField(textFieldSize);
-
         this.responseExtractionToolnamesTextfield = new JTextField(
                 textFieldSize);
         this.doProcessingsOnMarkedPartCheckbox = new JCheckBox(
@@ -215,9 +183,7 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                 Messages.getString("activate.this.rule.globally"));
         this.isextractFromRequestInsteadFromResponseCheckbox = new JCheckBox(
                 Messages.getString("extract.new.string.from.request.instead.from.response"));
-
         this.regexTestDisplay = DisplayText.getInstanceOfRegexTestWindow();
-
 
 
         this.setCurrentMatchReplaceSettings();
@@ -226,234 +192,82 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                 Variables.getInstance().getRegex());
         this.regexTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("regex"));
-        // this.regexTextfield.addKeyListener(regexChanged);
-        // this.regexTextfield.addFocusListener(focusListener);
-
-        this.replaceStringTextfield.setText(this.currentMatchReplaceSettings
-                .getReplaceString());
-        this.replaceStringTextfield.setToolTipText(Messages
-                .getString("replaceString"));
-
-        this.toolnameTextfield.setText(this.currentMatchReplaceSettings
-                .getToolnames());
-        this.toolnameTextfield.setToolTipText(Messages
-                .getString("replaceToolName"));
-
-        this.activeReplace.setSelected(this.currentMatchReplaceSettings
-                .isMatchReplaceActive());
-
-        this.regexForNewReplaceStringFromResponseExtraction
-        .getSearchTextfield()
-        .setText(
-                this.currentMatchReplaceSettings
-                .getRegexForNewReplaceStringFromResponseExtraction());
-        this.regexForNewReplaceStringFromResponseExtraction
-        .getSearchTextfield()
-        .setToolTipText(
+        this.replaceStringTextfield.setText(this.currentMatchReplaceSettings.getReplaceString());
+        this.replaceStringTextfield.setToolTipText(Messages.getString("replaceString"));
+        this.toolnameTextfield.setText(this.currentMatchReplaceSettings.getToolnames());
+        this.toolnameTextfield.setToolTipText(Messages.getString("replaceToolName"));
+        this.activeReplace.setSelected(this.currentMatchReplaceSettings.isMatchReplaceActive());
+        this.regexForNewReplaceStringFromResponseExtraction.getSearchTextfield().setText(
+                this.currentMatchReplaceSettings.getRegexForNewReplaceStringFromResponseExtraction());
+        this.regexForNewReplaceStringFromResponseExtraction.getSearchTextfield().setToolTipText(
                 Messages.getString("regexForNewReplaceStringFromResponseExtraction"));
-        // this.regexForNewReplaceStringFromResponseExtraction
-        // .addKeyListener(regexChanged);
-        // this.regexForNewReplaceStringFromResponseExtraction
-        // .addFocusListener(focusListener);
-
-        // this.csvDoing.setText(Variables.getInstance().getCsvDoingString());
-        // this.csvDoing.setToolTipText(Messages.getString("csvDoingString")
-        // + Variables.getInstance().getProcessingsString());
-
-        this.activeResponseUnpacking.setSelected(Variables.getInstance()
-                .isResponseUnpackingActive());
-
+        this.activeResponseUnpacking.setSelected(Variables.getInstance().isResponseUnpackingActive());
         this.responseRelevantRegexTextfield.getSearchTextfield().setText(
                 Variables.getInstance().getRelevantResponseRegex());
-        this.responseRelevantRegexTextfield.getSearchTextfield()
-        .setToolTipText(Messages.getString("relevantResponseRegex"));
-        // this.responseRelevantRegexTextfield.addKeyListener(regexChanged);
-        // this.responseRelevantRegexTextfield.addFocusListener(focusListener);
-
-        this.responseToolnameTextfield.setText(Variables.getInstance()
-                .getResponseToolName());
-        this.responseToolnameTextfield.setToolTipText(Messages
-                .getString("responseToolName"));
-
+        this.responseRelevantRegexTextfield.getSearchTextfield().setToolTipText(
+                Messages.getString("relevantResponseRegex"));
+        this.responseToolnameTextfield.setText(Variables.getInstance().getResponseToolName());
+        this.responseToolnameTextfield.setToolTipText(Messages.getString("responseToolName"));
         this.requestRelevantRegexTextfield.getSearchTextfield().setText(
                 Variables.getInstance().getRelevantResquestRegex());
         this.requestRelevantRegexTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("relevantResquestRegex"));
-        // this.requestRelevantRegexTextfield.addKeyListener(regexChanged);
-        // this.requestRelevantRegexTextfield.addFocusListener(focusListener);
-
-        this.requestToolnameTextfield.setText(Variables.getInstance()
-                .getRequestToolName());
-        this.requestToolnameTextfield.setToolTipText(Messages
-                .getString("requestToolName"));
-
-        // this.csvResponseDoing.setText(Variables.getInstance()
-        // .getCsvResponseDoingString());
-        // this.csvResponseDoing.setToolTipText(Messages
-        // .getString("csvDoingString")
-        // + Variables.getInstance().getProcessingsString());
-
-        this.activeRequestUnpacking.setSelected(Variables.getInstance()
-                .isRequestUnpackingActive());
-
-        // this.requestPrefix.setText(Variables.getInstance().getPrefix());
-        // this.requestPrefix.setToolTipText(Messages.getString("prefix"));
-
-        // this.activeRequestPrefix.setSelected(Variables.getInstance().isPrefixActive());
-
-
+        this.requestToolnameTextfield.setText(Variables.getInstance().getRequestToolName());
+        this.requestToolnameTextfield.setToolTipText(Messages.getString("requestToolName"));
+        this.activeRequestUnpacking.setSelected(Variables.getInstance().isRequestUnpackingActive());
         this.relevantReplaceRequestRegexTextfield.getSearchTextfield().setText(
-                this.currentMatchReplaceSettings
-                .getRelevantReplaceRequestRegex());
-        this.relevantReplaceRequestRegexTextfield.getSearchTextfield()
-        .setToolTipText(
+                this.currentMatchReplaceSettings.getRelevantReplaceRequestRegex());
+        this.relevantReplaceRequestRegexTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("relevantReplaceRequestRegex"));
-        // this.relevantReplaceRequestRegexTextfield.addKeyListener(regexChanged);
-        // this.relevantReplaceRequestRegexTextfield
-        // .addFocusListener(focusListener);
-
-
-        // this.activeResponseExtraction.setSelected(Variables.getInstance() //
-        // .isExtractNewReplaceStringFromResponseActive());
-
-
-        this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        .getSearchTextfield()
-        .setText(
-                this.currentMatchReplaceSettings
-                .getRelevantRequestRegexForResponseExtraction());
-        this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        .getSearchTextfield()
-        .setToolTipText(
+        this.relevantRequestRegexForReplaceResponseExtractionTextfield.getSearchTextfield().setText(
+                this.currentMatchReplaceSettings.getRelevantRequestRegexForResponseExtraction());
+        this.relevantRequestRegexForReplaceResponseExtractionTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("relevantRequestRegexForReplaceResponseExtraction"));
-        // this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        // .addKeyListener(regexChanged);
-        // this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        // .addFocusListener(focusListener);
-
-
-        this.replaceResponseExtractionMatchingNumberTextfield
-        .setText(this.currentMatchReplaceSettings
+        this.replaceResponseExtractionMatchingNumberTextfield.setText(this.currentMatchReplaceSettings
                 .getResponseExtractionMatchingNumber() + "");
-        this.replaceResponseExtractionMatchingNumberTextfield
-        .setToolTipText(Messages
+        this.replaceResponseExtractionMatchingNumberTextfield.setToolTipText(Messages
                 .getString("replaceResponseExtractionMatchingNumber"));
-
-        this.ReplaceActionDropdownlist
-        .setSelectedIndex(this.currentMatchReplaceSettings
+        this.ReplaceActionDropdownlist.setSelectedIndex(this.currentMatchReplaceSettings
                 .isReplaceOnlyFirstMatch() ? 0:1);
-
-        this.activeDebugMode.setSelected(Variables.getInstance()
-                .isDebugModeActive());
-
-        this.numberOfDebugLines.setText(""
-                + Variables.getInstance().getNumberOfDebugLines());
-        this.numberOfDebugLines.setToolTipText(Messages
-                .getString("number.of.debug.lines"));
-
-        this.isDropRequestActive.setSelected(Variables.getInstance()
-                .isDropRequestActive());
-
-        this.dropRequestRegex.getSearchTextfield().setText(
-                Variables.getInstance().getDropRequestRegex());
-        this.dropRequestRegex
-        .getSearchTextfield()
-        .setToolTipText(
+        this.activeDebugMode.setSelected(Variables.getInstance().isDebugModeActive());
+        this.numberOfDebugLines.setText("" + Variables.getInstance().getNumberOfDebugLines());
+        this.numberOfDebugLines.setToolTipText(Messages.getString("number.of.debug.lines"));
+        this.isDropRequestActive.setSelected(Variables.getInstance().isDropRequestActive());
+        this.dropRequestRegex.getSearchTextfield().setText(Variables.getInstance().getDropRequestRegex());
+        this.dropRequestRegex.getSearchTextfield().setToolTipText(
                 Messages.getString("a.regex.matching.the.request.that.should.be.dropped"));
-        // this.dropRequestRegex.addKeyListener(regexChanged);
-        // this.dropRequestRegex.addFocusListener(focusListener);
-
-        this.relevantUnpackedRequestRegexTextfield.getSearchTextfield()
-        .setText(
-                Variables.getInstance()
-                .getRelevantUnpackedRequestRegex());
-        this.relevantUnpackedRequestRegexTextfield
-        .getSearchTextfield()
-        .setToolTipText(
+        this.relevantUnpackedRequestRegexTextfield.getSearchTextfield().setText(
+                Variables.getInstance().getRelevantUnpackedRequestRegex());
+        this.relevantUnpackedRequestRegexTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("a.regex.matching.the.unpacked.request.that.should.be.packed.before.sending"));
-        // this.relevantUnpackedRequestRegexTextfield.addKeyListener(regexChanged);
-        // this.relevantUnpackedRequestRegexTextfield
-        // .addFocusListener(focusListener);
-
-        this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield()
-        .setText(
-                Variables.getInstance()
-                .getRegexMarkingRequestpartForUnpacking());
-        this.regexMarkingRequestpartForUnpackingTextfield
-        .getSearchTextfield()
-        .setToolTipText(
+        this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield().setText(
+                Variables.getInstance().getRegexMarkingRequestpartForUnpacking());
+        this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("a.regex.marking.the.relevant.part.within.the.request.which.should.be.unpacked"));
-        // this.regexMarkingRequestpartForUnpackingTextfield
-        // .addKeyListener(regexChanged);
-        // this.regexMarkingRequestpartForUnpackingTextfield
-        // .addFocusListener(focusListener);
-
-        this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield()
-        .setText(
-                Variables.getInstance()
-                .getRegexMarkingResponsepartForUnpacking());
-        this.regexMarkingResponsepartForUnpackingTextfield
-        .getSearchTextfield()
-        .setToolTipText(
+        this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield().setText(
+                Variables.getInstance().getRegexMarkingResponsepartForUnpacking());
+        this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield().setToolTipText(
                 Messages.getString("a.regex.marking.the.relevant.part.within.the.response.which.should.be.unpacked"));
-        // this.regexMarkingResponsepartForUnpackingTextfield
-        // .addKeyListener(regexChanged);
-        // this.regexMarkingResponsepartForUnpackingTextfield
-        // .addFocusListener(focusListener);
-
-        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .isRegexForResponseExtractionIdentifiesRequest() ? 0:1);
-
-        this.languageSelection.setSelectedItem(Variables.getInstance()
-                .getSelectedLanguage());
-
-        this.matchReplaceActionDropdownlist
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .getMatchReplaceAction());
-
-        // this.regexDropdownListStringTextfield.setText(Variables.getInstance()
-        // .getRegexDropdownList());
-
-        // this.payloadListPathTextfield.setText(Variables.getInstance() //
-        // .getPayloadListFilepath());
-        // this.payloadListPathTextfield.setToolTipText(Messages
-        // .getString("the.file.path.to.the.payload.list"));
-        this.matchIndicatesNonrelevanceForMatchreplaceRequest
-        .setSelected(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForMatchreplaceRequest());
-
-        this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction
-        .setSelected(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForResponseextraction());
-
-        this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking
-        .setSelected(Variables
-                .getInstance()
-                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingBeforeunpacking());
-        this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking
-        .setSelected(Variables
-                .getInstance()
-                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingAfterunpacking());
-        this.matchIndicatesNonrelevanceForResponseunpacking
-        .setSelected(Variables
-                .getInstance()
-                .isRegexmatchIndicatingInrelevanceOnCurrentMessageForResponseunpacking());
-
-        this.matchReplaceProcessingCsvstringTextfield
-        .setProcessingString(this.currentMatchReplaceSettings
-                .getProcessingOfReplacestringCsvstring());
-        // this.matchReplaceProcessingCsvstringTextfield.setToolTipText(Messages
-        // .getString("csvDoingString")
-        // + Variables.getInstance().getProcessingsString());
-
-        this.sessionHandlingActionDelayTextfield.setText(""
-                + Variables.getInstance()
-                .getSessionHandlingProduceDelayTimeInMillis());
-
-        this.responseExtractionToolnamesTextfield.setToolTipText(Messages
-                .getString("response.extraction.toolnames"));
-
+        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox.setSelectedIndex(
+                this.currentMatchReplaceSettings.isRegexForResponseExtractionIdentifiesRequest() ? 0:1);
+        this.languageSelection.setSelectedItem(Variables.getInstance().getSelectedLanguage());
+        this.matchReplaceActionDropdownlist.setSelectedIndex(this.currentMatchReplaceSettings.getMatchReplaceAction());
+        this.matchIndicatesNonrelevanceForMatchreplaceRequest.setSelected(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForMatchreplaceRequest());
+        this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction.setSelected(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForResponseextraction());
+        this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking.setSelected(Variables.getInstance()
+                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingBeforeunpacking()); //TODO: shorter function names
+        this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking.setSelected(Variables.getInstance()
+                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingAfterunpacking()); //TODO: shorter function names
+        this.matchIndicatesNonrelevanceForResponseunpacking.setSelected(Variables.getInstance()
+                .isRegexmatchIndicatingInrelevanceOnCurrentMessageForResponseunpacking()); //TODO: shorter function names
+        this.matchReplaceProcessingCsvstringTextfield.setProcessingString(
+                this.currentMatchReplaceSettings.getProcessingOfReplacestringCsvstring());
+        this.sessionHandlingActionDelayTextfield.setText("" +
+                Variables.getInstance().getSessionHandlingProduceDelayTimeInMillis());
+        this.responseExtractionToolnamesTextfield.setToolTipText(
+                Messages.getString("response.extraction.toolnames"));
 
         this.loadActualMatchReplaceSettingsIndex();
 
@@ -466,10 +280,8 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         ActionListener save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 TextFieldsWindow2.this.setValues();
                 TextFieldsWindow2.this.setEditable();
-
             }
         };
 
@@ -477,7 +289,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         ActionListener showDebugAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (TextFieldsWindow2.this.debugModeDisplay == null) {
                     TextFieldsWindow2.this.debugModeDisplay = DisplayText
                             .getInstanceOfDebugWindow();
@@ -491,7 +302,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         ActionListener changesMade = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 TextFieldsWindow2.this.setEditable();
 
             }
@@ -504,13 +314,13 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         this.showRegexTest5 = new JButton(Messages.getString("regex.text"));
         this.showRegexTest6 = new JButton(Messages.getString("regex.text"));
         this.showRegexTest7 = new JButton(Messages.getString("regex.text"));
+
         ActionListener regexTestAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (TextFieldsWindow2.this.regexTestDisplay == null) {
                     TextFieldsWindow2.this.regexTestDisplay = DisplayText
                             .getInstanceOfRegexTestWindow();
-
                 }
                 TextFieldsWindow2.this.regexTestDisplay.showRegexTestWindow();
                 TextFieldsWindow2.this.reRegisterSearchlabelsMaintextarea();
@@ -520,7 +330,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         ActionListener saveValuesToFileActionlistener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 MyFileChooser fc = new MyFileChooser(Variables.getInstance()
                         .getWorkingDirectory(), ".gsv", "Gunziper Saved Values");
                 fc.init(true);
@@ -529,7 +338,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                     VariablesFunctions.saveValuesToFile(fc.getFile()
                             .getAbsolutePath());
                 }
-
             }
         };
 
@@ -1036,6 +844,12 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         this.setVisible(true);
     }
 
+    /**
+     * Create a section header with the a similar font
+     * format like Burp (Orange, Bold, large fonz size).
+     * @param title The text of the header.
+     * @return A JLabel instance.
+     */
     private JLabel createSectionHeader(String title){
         JLabel header = new JLabel(title);
         header.setFont(new Font(header.getFont().getFontName(), Font.BOLD, 15));
@@ -1044,6 +858,12 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         return header;
     }
 
+    /**
+     * Create the blue seperator line for box layouts. The
+     * line has no margins/paddings that will change the
+     * overall panel-layout (like JSeperator()).
+     * @return A JPanel instance.
+     */
     private JPanel createSeperatorPanel(){
         JPanel pad_panel = new JPanel();
         pad_panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
@@ -1084,7 +904,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
      */
     @Override
     public String getTabCaption() {
-
         return "gunziper config";
     }
 
@@ -1095,7 +914,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
      */
     @Override
     public Component getUiComponent() {
-
         return this;
     }
 
@@ -1103,118 +921,96 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
 
         this.setCurrentMatchReplaceSettings();
 
-        this.toolnameTextfield.setText(this.currentMatchReplaceSettings
-                .getToolnames());
+        this.toolnameTextfield.setText(this.currentMatchReplaceSettings.getToolnames());
 
         this.relevantReplaceRequestRegexTextfield.getSearchTextfield().setText(
-                this.currentMatchReplaceSettings
-                .getRelevantReplaceRequestRegex());
+                this.currentMatchReplaceSettings.getRelevantReplaceRequestRegex());
 
-        this.matchIndicatesNonrelevanceForMatchreplaceRequest
-        .setSelected(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForMatchreplaceRequest());
+        this.matchIndicatesNonrelevanceForMatchreplaceRequest.setSelected(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForMatchreplaceRequest());
 
         this.regexTextfield.getSearchTextfield().setText(
-                this.currentMatchReplaceSettings
-                .getRegexMarkingRelevantPartForReplacement());
+                this.currentMatchReplaceSettings.getRegexMarkingRelevantPartForReplacement());
 
-        this.replaceStringTextfield.setText(this.currentMatchReplaceSettings
-                .getReplaceString());
+        this.replaceStringTextfield.setText(this.currentMatchReplaceSettings.getReplaceString());
 
-        this.ReplaceActionDropdownlist
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .isReplaceOnlyFirstMatch() ? 0:1);
+        this.ReplaceActionDropdownlist.setSelectedIndex(
+                this.currentMatchReplaceSettings.isReplaceOnlyFirstMatch() ? 0:1);
 
-        this.matchReplaceActionDropdownlist
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .getMatchReplaceAction());
+        this.matchReplaceActionDropdownlist.setSelectedIndex(
+                this.currentMatchReplaceSettings.getMatchReplaceAction());
 
-        this.activeReplace.setSelected(this.currentMatchReplaceSettings
-                .isMatchReplaceActive());
+        this.activeReplace.setSelected(this.currentMatchReplaceSettings.isMatchReplaceActive());
 
-        this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        .getSearchTextfield()
-        .setText(
-                this.currentMatchReplaceSettings
-                .getRelevantRequestRegexForResponseExtraction());
+        this.relevantRequestRegexForReplaceResponseExtractionTextfield.getSearchTextfield().setText(
+                this.currentMatchReplaceSettings.getRelevantRequestRegexForResponseExtraction());
 
-        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .isRegexForResponseExtractionIdentifiesRequest() ? 0:1);
+        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox.setSelectedIndex(
+                this.currentMatchReplaceSettings.isRegexForResponseExtractionIdentifiesRequest() ? 0:1);
 
-        this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction
-        .setSelected(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForResponseextraction());
+        this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction.setSelected(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForResponseextraction());
 
-        this.regexForNewReplaceStringFromResponseExtraction
-        .getSearchTextfield()
-        .setText(
-                this.currentMatchReplaceSettings
-                .getRegexForNewReplaceStringFromResponseExtraction());
+        this.regexForNewReplaceStringFromResponseExtraction.getSearchTextfield().setText(
+                this.currentMatchReplaceSettings.getRegexForNewReplaceStringFromResponseExtraction());
 
-        this.replaceResponseExtractionMatchingNumberTextfield
-        .setText(this.currentMatchReplaceSettings
-                .getResponseExtractionMatchingNumber() + "");
+        this.replaceResponseExtractionMatchingNumberTextfield.setText(
+                this.currentMatchReplaceSettings.getResponseExtractionMatchingNumber() + "");
 
-        this.matchReplaceProcessingActiveCheckbox
-        .setSelected(this.currentMatchReplaceSettings
-                .isProcessingOfReplacestringActive());
+        this.matchReplaceProcessingActiveCheckbox.setSelected(
+                this.currentMatchReplaceSettings.isProcessingOfReplacestringActive());
 
-        this.matchReplaceProcessingCsvstringTextfield
-        .setProcessingString(this.currentMatchReplaceSettings
-                .getProcessingOfReplacestringCsvstring());
+        this.matchReplaceProcessingCsvstringTextfield.setProcessingString(
+                this.currentMatchReplaceSettings.getProcessingOfReplacestringCsvstring());
 
-        this.responseExtractionToolnamesTextfield
-        .setText(this.currentMatchReplaceSettings
-                .getResponseToolnames());
-        this.doProcessingsOnMarkedPartCheckbox
-        .setSelected(this.currentMatchReplaceSettings
-                .isOnlyDoProcessingOfMarkedPart());
-        this.doRequestReplacementAfterUnpackingCheckbox
-        .setSelected(this.currentMatchReplaceSettings
-                .isDoRequestReplacementAfterUnpacking());
-        this.doResponseExtractionAfterUnpackingCheckbox
-        .setSelected(this.currentMatchReplaceSettings
-                .isDoResponseExtractionAfterUnpacking());
-        this.activateRuleGloballyCheckbox
-        .setSelected(this.currentMatchReplaceSettings
-                .isActivateThisRuleGlobally());
-        this.isextractFromRequestInsteadFromResponseCheckbox
-        .setSelected(this.currentMatchReplaceSettings
-                .isExtractFromRequestInsteadFromResponse());
+        this.responseExtractionToolnamesTextfield.setText(
+                this.currentMatchReplaceSettings.getResponseToolnames());
+
+        this.doProcessingsOnMarkedPartCheckbox.setSelected(
+                this.currentMatchReplaceSettings.isOnlyDoProcessingOfMarkedPart());
+
+        this.doRequestReplacementAfterUnpackingCheckbox.setSelected(
+                this.currentMatchReplaceSettings.isDoRequestReplacementAfterUnpacking());
+
+        this.doResponseExtractionAfterUnpackingCheckbox.setSelected(
+                this.currentMatchReplaceSettings.isDoResponseExtractionAfterUnpacking());
+
+        this.activateRuleGloballyCheckbox.setSelected(
+                this.currentMatchReplaceSettings.isActivateThisRuleGlobally());
+
+        this.isextractFromRequestInsteadFromResponseCheckbox.setSelected(
+                this.currentMatchReplaceSettings.isExtractFromRequestInsteadFromResponse());
 
         this.setEditable();
     }
 
     private void reRegisterSearchlabelsMaintextarea() {
 
-        this.regexTextfield.registerNewTextarea(this.regexTestDisplay
-                .getMainTextarea());
-        this.responseRelevantRegexTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.requestRelevantRegexTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.relevantReplaceRequestRegexTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.regexForNewReplaceStringFromResponseExtraction
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.dropRequestRegex.registerNewTextarea(this.regexTestDisplay
-                .getMainTextarea());
-        this.relevantUnpackedRequestRegexTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.regexMarkingRequestpartForUnpackingTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-        this.regexMarkingResponsepartForUnpackingTextfield
-        .registerNewTextarea(this.regexTestDisplay.getMainTextarea());
-
+        this.regexTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.responseRelevantRegexTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.requestRelevantRegexTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.relevantRequestRegexForReplaceResponseExtractionTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.relevantReplaceRequestRegexTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.regexForNewReplaceStringFromResponseExtraction.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.dropRequestRegex.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.relevantUnpackedRequestRegexTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.regexMarkingRequestpartForUnpackingTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
+        this.regexMarkingResponsepartForUnpackingTextfield.registerNewTextarea(
+                this.regexTestDisplay.getMainTextarea());
     }
 
     public void resetValues() {
 
-        this.regexTextfield.getSearchTextfield().setText(
-                Variables.getInstance().getRegex());
+        this.regexTextfield.getSearchTextfield().setText(Variables.getInstance().getRegex());
 
         this.replaceStringTextfield.setText(this.currentMatchReplaceSettings
                 .getReplaceString());
@@ -1255,207 +1051,140 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         this.activeRequestUnpacking.setSelected(Variables.getInstance()
                 .isRequestUnpackingActive());
 
-
-
-
-
         this.relevantReplaceRequestRegexTextfield.getSearchTextfield().setText(
-                this.currentMatchReplaceSettings
-                .getRelevantReplaceRequestRegex());
+                this.currentMatchReplaceSettings.getRelevantReplaceRequestRegex());
 
+        this.relevantRequestRegexForReplaceResponseExtractionTextfield.getSearchTextfield().setText(
+                this.currentMatchReplaceSettings.getRelevantRequestRegexForResponseExtraction());
 
+        this.replaceResponseExtractionMatchingNumberTextfield.setText(
+                this.currentMatchReplaceSettings.getResponseExtractionMatchingNumber() + "");
 
-        this.relevantRequestRegexForReplaceResponseExtractionTextfield
-        .getSearchTextfield()
-        .setText(
-                this.currentMatchReplaceSettings
-                .getRelevantRequestRegexForResponseExtraction());
+        this.ReplaceActionDropdownlist.setSelectedIndex(
+                this.currentMatchReplaceSettings.isReplaceOnlyFirstMatch() ? 0:1);
 
+        this.activeDebugMode.setSelected(Variables.getInstance().isDebugModeActive());
 
-        this.replaceResponseExtractionMatchingNumberTextfield
-        .setText(this.currentMatchReplaceSettings
-                .getResponseExtractionMatchingNumber() + "");
+        this.numberOfDebugLines.setText("" + Variables.getInstance().getNumberOfDebugLines());
 
-        this.ReplaceActionDropdownlist
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .isReplaceOnlyFirstMatch() ? 0:1);
-
-        this.activeDebugMode.setSelected(Variables.getInstance()
-                .isDebugModeActive());
-
-        this.numberOfDebugLines.setText(""
-                + Variables.getInstance().getNumberOfDebugLines());
-
-        this.isDropRequestActive.setSelected(Variables.getInstance()
-                .isDropRequestActive());
+        this.isDropRequestActive.setSelected(Variables.getInstance().isDropRequestActive());
 
         this.dropRequestRegex.getSearchTextfield().setText(
                 Variables.getInstance().getDropRequestRegex());
 
-        this.relevantUnpackedRequestRegexTextfield.getSearchTextfield()
-        .setText(
-                Variables.getInstance()
-                .getRelevantUnpackedRequestRegex());
+        this.relevantUnpackedRequestRegexTextfield.getSearchTextfield().setText(
+                Variables.getInstance().getRelevantUnpackedRequestRegex());
 
-        this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield()
-        .setText(
-                Variables.getInstance()
-                .getRegexMarkingRequestpartForUnpacking());
+        this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield().setText(
+                Variables.getInstance().getRegexMarkingRequestpartForUnpacking());
 
+        this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield().setText(
+                Variables.getInstance().getRegexMarkingResponsepartForUnpacking());
 
-        this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield()
-        .setText(
-                Variables.getInstance()
-                .getRegexMarkingResponsepartForUnpacking());
+        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox.setSelectedIndex(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForResponseextraction() ? 0:1);
 
-        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForResponseextraction() ? 0
-                        :1);
+        this.languageSelection.setSelectedItem(Variables.getInstance().getSelectedLanguage());
 
-        this.languageSelection.setSelectedItem(Variables.getInstance()
-                .getSelectedLanguage());
+        this.matchReplaceActionDropdownlist.setSelectedIndex(
+                this.currentMatchReplaceSettings.getMatchReplaceAction());
 
-        this.matchReplaceActionDropdownlist
-        .setSelectedIndex(this.currentMatchReplaceSettings
-                .getMatchReplaceAction());
+        this.matchIndicatesNonrelevanceForMatchreplaceRequest.setSelected(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForMatchreplaceRequest());
 
-        // this.regexDropdownListStringTextfield.setText(Variables.getInstance()
-        // .getRegexDropdownList());
+        this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction.setSelected(
+                this.currentMatchReplaceSettings.isMatchIndicatesNonrelevanceForResponseextraction());
 
-        this.matchIndicatesNonrelevanceForMatchreplaceRequest
-        .setSelected(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForMatchreplaceRequest());
-
-        this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction
-        .setSelected(this.currentMatchReplaceSettings
-                .isMatchIndicatesNonrelevanceForResponseextraction());
-
-        this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking
-        .setSelected(Variables
-                .getInstance()
-                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingBeforeunpacking());
-        this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking
-        .setSelected(Variables
-                .getInstance()
-                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingAfterunpacking());
-        this.matchIndicatesNonrelevanceForResponseunpacking
-        .setSelected(Variables
-                .getInstance()
-                .isRegexmatchIndicatingInrelevanceOnCurrentMessageForResponseunpacking());
-        this.sessionHandlingActionDelayTextfield.setText(""
-                + Variables.getInstance()
-                .getSessionHandlingProduceDelayTimeInMillis());
-
-        // this.payloadListPathTextfield.setText(Variables.getInstance() //
-        // .getPayloadListFilepath());
+        this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking.setSelected(Variables.getInstance()
+                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingBeforeunpacking()); //TODO: shorter function names
+        this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking.setSelected(Variables.getInstance()
+                .isRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingAfterunpacking()); //TODO: shorter function names
+        this.matchIndicatesNonrelevanceForResponseunpacking.setSelected(Variables.getInstance()
+                .isRegexmatchIndicatingInrelevanceOnCurrentMessageForResponseunpacking()); //TODO: shorter function names
+        this.sessionHandlingActionDelayTextfield.setText("" +
+                Variables.getInstance().getSessionHandlingProduceDelayTimeInMillis());
 
         this.loadActualMatchReplaceSettingsIndex();
     }
 
     private void saveActualMatchReplaceSettingsIndex() {
 
-        this.currentMatchReplaceSettings.setToolnames(this.toolnameTextfield
-                .getText());
+        this.currentMatchReplaceSettings.setToolnames(this.toolnameTextfield.getText());
 
-        this.currentMatchReplaceSettings
-        .setRelevantReplaceRequestRegex(this.relevantReplaceRequestRegexTextfield
-                .getSearchTextfield().getText());
+        this.currentMatchReplaceSettings.setRelevantReplaceRequestRegex(
+                this.relevantReplaceRequestRegexTextfield.getSearchTextfield().getText());
 
-        this.currentMatchReplaceSettings
-        .setMatchIndicatesNonrelevanceForMatchreplaceRequest(this.matchIndicatesNonrelevanceForMatchreplaceRequest
-                .isSelected());
+        this.currentMatchReplaceSettings.setMatchIndicatesNonrelevanceForMatchreplaceRequest(
+                this.matchIndicatesNonrelevanceForMatchreplaceRequest.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setRegexMarkingRelevantPartForReplacement(this.regexTextfield
-                .getSearchTextfield().getText());
+        this.currentMatchReplaceSettings.setRegexMarkingRelevantPartForReplacement(
+                this.regexTextfield.getSearchTextfield().getText());
 
-        this.currentMatchReplaceSettings
-        .setReplaceString(this.replaceStringTextfield.getText());
+        this.currentMatchReplaceSettings.setReplaceString(this.replaceStringTextfield.getText());
 
-        this.currentMatchReplaceSettings
-        .setReplaceOnlyFirstMatch(this.ReplaceActionDropdownlist
-                .getSelectedIndex() == 0);
+        this.currentMatchReplaceSettings.setReplaceOnlyFirstMatch(
+                this.ReplaceActionDropdownlist.getSelectedIndex() == 0);
 
-        this.currentMatchReplaceSettings
-        .setMatchReplaceAction(this.matchReplaceActionDropdownlist
-                .getSelectedIndex());
+        this.currentMatchReplaceSettings.setMatchReplaceAction(
+                this.matchReplaceActionDropdownlist.getSelectedIndex());
 
-        this.currentMatchReplaceSettings
-        .setMatchReplaceActive(this.activeReplace.isSelected());
+        this.currentMatchReplaceSettings.setMatchReplaceActive(this.activeReplace.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setRelevantRequestRegexForResponseExtraction(this.relevantRequestRegexForReplaceResponseExtractionTextfield
-                .getSearchTextfield().getText());
+        this.currentMatchReplaceSettings.setRelevantRequestRegexForResponseExtraction(
+                this.relevantRequestRegexForReplaceResponseExtractionTextfield.getSearchTextfield().getText());
 
-        this.currentMatchReplaceSettings
-        .setRegexForResponseExtractionIdentifiesRequest(this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox
-                .getSelectedIndex() == 0);
+        this.currentMatchReplaceSettings.setRegexForResponseExtractionIdentifiesRequest(
+                this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox.getSelectedIndex() == 0);
 
-        this.currentMatchReplaceSettings
-        .setMatchIndicatesNonrelevanceForResponseextraction(this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction
-                .isSelected());
+        this.currentMatchReplaceSettings.setMatchIndicatesNonrelevanceForResponseextraction(
+                this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setRegexForNewReplaceStringFromResponseExtraction(this.regexForNewReplaceStringFromResponseExtraction
-                .getSearchTextfield().getText());
+        this.currentMatchReplaceSettings.setRegexForNewReplaceStringFromResponseExtraction(
+                this.regexForNewReplaceStringFromResponseExtraction.getSearchTextfield().getText());
 
         try {
-            this.currentMatchReplaceSettings
-            .setResponseExtractionMatchingNumber(Integer
-                    .parseInt(this.replaceResponseExtractionMatchingNumberTextfield
-                            .getText()));
+            this.currentMatchReplaceSettings.setResponseExtractionMatchingNumber(
+                    Integer.parseInt(this.replaceResponseExtractionMatchingNumberTextfield.getText()));
         }catch (NumberFormatException ex) {
             new DisplayText(Messages.getString("errorOccured"),
                     Messages.getString("invalid.response.extraction.number"));
             ex.printStackTrace();
         }
 
-        this.currentMatchReplaceSettings
-        .setProcessingOfReplacestringActive(this.matchReplaceProcessingActiveCheckbox
-                .isSelected());
-
+        this.currentMatchReplaceSettings.setProcessingOfReplacestringActive(
+                this.matchReplaceProcessingActiveCheckbox.isSelected());
 
         try {
             if (this.currentMatchReplaceSettings.isMatchReplaceActive()) {
-                this.checkCSVdoingString(this.matchReplaceProcessingCsvstringTextfield
-                        .getProcessingString());
-                this.currentMatchReplaceSettings
-                .setProcessingOfReplacestringCsvstring(this.matchReplaceProcessingCsvstringTextfield
-                        .getProcessingString());
+                this.checkCSVdoingString(
+                        this.matchReplaceProcessingCsvstringTextfield.getProcessingString());
+                this.currentMatchReplaceSettings.setProcessingOfReplacestringCsvstring(
+                        this.matchReplaceProcessingCsvstringTextfield.getProcessingString());
             }
         }catch (IllegalArgumentException ex) {
             new DisplayText(Messages.getString("errorOccured"), ex.getMessage());
-            // ex.printStackTrace();
         }
 
-        this.currentMatchReplaceSettings
-        .setResponseToolnames(this.responseExtractionToolnamesTextfield
-                .getText());
+        this.currentMatchReplaceSettings.setResponseToolnames(
+                this.responseExtractionToolnamesTextfield.getText());
 
-        this.currentMatchReplaceSettings
-        .setOnlyDoProcessingOfMarkedPart(this.doProcessingsOnMarkedPartCheckbox
-                .isSelected());
+        this.currentMatchReplaceSettings.setOnlyDoProcessingOfMarkedPart(
+                this.doProcessingsOnMarkedPartCheckbox.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setDoRequestReplacementAfterUnpacking(this.doRequestReplacementAfterUnpackingCheckbox
-                .isSelected());
+        this.currentMatchReplaceSettings.setDoRequestReplacementAfterUnpacking(
+                this.doRequestReplacementAfterUnpackingCheckbox.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setDoResponseExtractionAfterUnpacking(this.doResponseExtractionAfterUnpackingCheckbox
-                .isSelected());
+        this.currentMatchReplaceSettings.setDoResponseExtractionAfterUnpacking(
+                this.doResponseExtractionAfterUnpackingCheckbox.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setActivateThisRuleGlobally(this.activateRuleGloballyCheckbox
-                .isSelected());
+        this.currentMatchReplaceSettings.setActivateThisRuleGlobally(
+                this.activateRuleGloballyCheckbox.isSelected());
 
-        this.currentMatchReplaceSettings
-        .setExtractFromRequestInsteadFromResponse(this.isextractFromRequestInsteadFromResponseCheckbox
-                .isSelected());
+        this.currentMatchReplaceSettings.setExtractFromRequestInsteadFromResponse(
+                this.isextractFromRequestInsteadFromResponseCheckbox.isSelected());
     }
 
     private void setComponentEnabled(JComponent comp, boolean enabled) {
-
         if (comp.isEnabled() != enabled) {
             comp.setBackground(enabled ? null:Color.GRAY);
             comp.setEnabled(enabled);
@@ -1463,111 +1192,73 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
     }
 
     private void setCurrentMatchReplaceSettings() {
-
-        this.currentMatchReplaceSettings = Variables.getInstance()
-                .getMatchReplaceSettingsArray()
-                .get(this.matchReplacesIteratorCombobox.getSelectedIndex());
+        this.currentMatchReplaceSettings = Variables.getInstance().getMatchReplaceSettingsArray().get(
+                this.matchReplacesIteratorCombobox.getSelectedIndex());
     }
 
     private void setEditable() {
-
         boolean enabled = false;
 
         // REQUEST UNPACKING
         enabled = this.activeRequestUnpacking.isSelected();
-
         this.setComponentEnabled(this.requestToolnameTextfield, enabled);
-        this.setComponentEnabled(
-                this.requestRelevantRegexTextfield.getSearchTextfield(),
-                enabled);
+        this.setComponentEnabled(this.requestRelevantRegexTextfield.getSearchTextfield(), enabled);
         this.setComponentEnabled(this.csvDoing, enabled);
-        this.setComponentEnabled(
-                this.relevantUnpackedRequestRegexTextfield.getSearchTextfield(),
-                enabled);
-        this.setComponentEnabled(
-                this.regexMarkingRequestpartForUnpackingTextfield
-                .getSearchTextfield(), enabled);
-        this.setComponentEnabled(
-                this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking,
-                enabled);
-        this.setComponentEnabled(
-                this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking,
-                enabled);
-
+        this.setComponentEnabled(this.relevantUnpackedRequestRegexTextfield.getSearchTextfield(), enabled);
+        this.setComponentEnabled(this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield(), enabled);
+        this.setComponentEnabled(this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking, enabled);
+        this.setComponentEnabled(this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking, enabled);
 
         // RESPONSE UNPACKING
         enabled = this.activeResponseUnpacking.isSelected();
-
         this.setComponentEnabled(this.responseToolnameTextfield, enabled);
-        this.setComponentEnabled(
-                this.responseRelevantRegexTextfield.getSearchTextfield(),
-                enabled);
+        this.setComponentEnabled(this.responseRelevantRegexTextfield.getSearchTextfield(), enabled);
         this.setComponentEnabled(this.csvResponseDoing, enabled);
-        this.setComponentEnabled(
-                this.regexMarkingResponsepartForUnpackingTextfield
-                .getSearchTextfield(), enabled);
-        this.setComponentEnabled(
-                this.matchIndicatesNonrelevanceForResponseunpacking, enabled);
-
+        this.setComponentEnabled(this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield(), enabled);
+        this.setComponentEnabled(this.matchIndicatesNonrelevanceForResponseunpacking, enabled);
 
         // MATCH REPLACE
         enabled = this.activeReplace.isSelected();
-        this.setComponentEnabled(this.toolnameTextfield, enabled
-                && this.activateRuleGloballyCheckbox.isSelected());
-        this.setComponentEnabled(this.regexTextfield.getSearchTextfield(),
-                enabled);
-        this.setComponentEnabled(
-                this.replaceStringTextfield,
-                (!(this.doProcessingsOnMarkedPartCheckbox.isSelected() && this.matchReplaceProcessingActiveCheckbox
-                        .isSelected())) && enabled);
-        this.setComponentEnabled(
-                this.relevantReplaceRequestRegexTextfield.getSearchTextfield(),
+        this.setComponentEnabled(this.toolnameTextfield,
+                enabled && this.activateRuleGloballyCheckbox.isSelected());
+        this.setComponentEnabled(this.regexTextfield.getSearchTextfield(), enabled);
+        this.setComponentEnabled(this.replaceStringTextfield,
+                (!(this.doProcessingsOnMarkedPartCheckbox.isSelected() &&
+                        this.matchReplaceProcessingActiveCheckbox.isSelected())) && enabled);
+        this.setComponentEnabled(this.relevantReplaceRequestRegexTextfield.getSearchTextfield(),
                 enabled && this.activateRuleGloballyCheckbox.isSelected());
         this.setComponentEnabled(this.ReplaceActionDropdownlist, enabled);
         this.setComponentEnabled(this.matchReplaceActionDropdownlist, enabled);
-        this.setComponentEnabled(
-                this.matchIndicatesNonrelevanceForMatchreplaceRequest, enabled
-                && this.activateRuleGloballyCheckbox.isSelected());
-        this.setComponentEnabled(this.matchReplaceProcessingActiveCheckbox,
-                enabled);
+        this.setComponentEnabled(this.matchIndicatesNonrelevanceForMatchreplaceRequest, enabled &&
+                this.activateRuleGloballyCheckbox.isSelected());
+        this.setComponentEnabled(this.matchReplaceProcessingActiveCheckbox, enabled);
         this.setComponentEnabled(this.matchReplaceProcessingCsvstringTextfield,
-                this.matchReplaceProcessingActiveCheckbox.isSelected()
-                && enabled);
+                this.matchReplaceProcessingActiveCheckbox.isSelected() && enabled);
         this.setComponentEnabled(this.activateRuleGloballyCheckbox, enabled);
         this.setComponentEnabled(this.doProcessingsOnMarkedPartCheckbox,
-                this.matchReplaceProcessingActiveCheckbox.isSelected()
-                && enabled);
-        this.setComponentEnabled(
-                this.doRequestReplacementAfterUnpackingCheckbox, Variables
-                .getInstance().isRequestUnpackingActive() && enabled);
-
+                this.matchReplaceProcessingActiveCheckbox.isSelected() && enabled);
+        this.setComponentEnabled(this.doRequestReplacementAfterUnpackingCheckbox,
+                Variables.getInstance().isRequestUnpackingActive() && enabled);
 
         // MATCH REPLACE - RESPONSE EXTRACTION
-        enabled = ((this.matchReplaceActionDropdownlist.getSelectedIndex() == 2) && this.activeReplace
-                .isSelected());
+        enabled = ((this.matchReplaceActionDropdownlist.getSelectedIndex() == 2) &&
+                this.activeReplace.isSelected());
 
         this.setComponentEnabled(
-                this.regexForNewReplaceStringFromResponseExtraction
-                .getSearchTextfield(), enabled);
+                this.regexForNewReplaceStringFromResponseExtraction.getSearchTextfield(), enabled);
         this.setComponentEnabled(
-                this.relevantRequestRegexForReplaceResponseExtractionTextfield
-                .getSearchTextfield(), enabled);
+                this.relevantRequestRegexForReplaceResponseExtractionTextfield.getSearchTextfield(), enabled);
         this.setComponentEnabled(
                 this.replaceResponseExtractionMatchingNumberTextfield, enabled);
         this.setComponentEnabled(
-                this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox,
-                enabled);
+                this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox, enabled);
         this.setComponentEnabled(
-                this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction,
-                enabled);
-        this.setComponentEnabled(this.responseExtractionToolnamesTextfield,
-                enabled);
-        this.setComponentEnabled(
-                this.doResponseExtractionAfterUnpackingCheckbox, Variables
-                .getInstance().isResponseUnpackingActive());
+                this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction, enabled);
+        this.setComponentEnabled(this.responseExtractionToolnamesTextfield, enabled);
+        this.setComponentEnabled(this.doResponseExtractionAfterUnpackingCheckbox,
+                Variables.getInstance().isResponseUnpackingActive());
         this.setComponentEnabled(
                 this.isextractFromRequestInsteadFromResponseCheckbox, enabled);
-
 
         // DROP REQUESTS
         this.setComponentEnabled(this.dropRequestRegex.getSearchTextfield(),
@@ -1587,55 +1278,30 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         Variables.getInstance().setResponseToolName(
                 this.responseToolnameTextfield.getText());
         Variables.getInstance().setRelevantResponseRegex(
-                this.responseRelevantRegexTextfield.getSearchTextfield()
-                .getText());
+                this.responseRelevantRegexTextfield.getSearchTextfield().getText());
         Variables.getInstance().setRelevantResquestRegex(
-                this.requestRelevantRegexTextfield.getSearchTextfield()
-                .getText());
-
+                this.requestRelevantRegexTextfield.getSearchTextfield().getText());
         Variables.getInstance().setDebugModeActive(
                 this.activeDebugMode.isSelected());
         Variables.getInstance().setDropRequestActive(
                 this.isDropRequestActive.isSelected());
         Variables.getInstance().setDropRequestRegex(
                 this.dropRequestRegex.getSearchTextfield().getText());
-
         Variables.getInstance().setRelevantUnpackedRequestRegex(
-                this.relevantUnpackedRequestRegexTextfield.getSearchTextfield()
-                .getText());
-
+                this.relevantUnpackedRequestRegexTextfield.getSearchTextfield().getText());
         Variables.getInstance().setRegexMarkingRequestpartForUnpacking(
-                this.regexMarkingRequestpartForUnpackingTextfield
-                .getSearchTextfield().getText());
-
+                this.regexMarkingRequestpartForUnpackingTextfield.getSearchTextfield().getText());
         Variables.getInstance().setRegexMarkingResponsepartForUnpacking(
-                this.regexMarkingResponsepartForUnpackingTextfield
-                .getSearchTextfield().getText());
-
+                this.regexMarkingResponsepartForUnpackingTextfield.getSearchTextfield().getText());
         Variables.getInstance().setSelectedLanguage(
                 (String) this.languageSelection.getSelectedItem());
         Messages.setLanguage((String) this.languageSelection.getSelectedItem());
-
-        Variables
-        .getInstance()
-        .setRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingAfterunpacking(
-                this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking
-                .isSelected());
-        Variables
-        .getInstance()
-        .setRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingBeforeunpacking(
-                this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking
-                .isSelected());
-        Variables
-        .getInstance()
-        .setRegexmatchIndicateInrelevanceOnCurrentMessageForResponseunpacking(
-                this.matchIndicatesNonrelevanceForResponseunpacking
-                .isSelected());
-
-
-        // Variables.getInstance() //
-        // .setPayloadListFilepath(this.payloadListPathTextfield
-        // .getText());
+        Variables.getInstance().setRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingAfterunpacking( //TODO: shorter function names
+                this.matchIndicatesNonrelevanceForRequestunpackingAfterunpacking.isSelected());
+        Variables.getInstance().setRegexmatchIndicateInrelevanceOnCurrentMessageForRequestunpackingBeforeunpacking( //TODO: shorter function names
+                this.matchIndicatesNonrelevanceForRequestunpackingBeforeunpacking.isSelected());
+        Variables.getInstance().setRegexmatchIndicateInrelevanceOnCurrentMessageForResponseunpacking( //TODO: shorter function names
+                this.matchIndicatesNonrelevanceForResponseunpacking.isSelected());
 
         try {
             Variables.getInstance().setNumberOfDebugLines(
@@ -1645,17 +1311,6 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                     Messages.getString("invalid.number.of.debug.lines"));
             ex.printStackTrace();
         }
-
-        // try {
-        // this.currentMatchReplaceSettings
-        // .setResponseExtractionMatchingNumber(Integer
-        // .parseInt(this.replaceResponseExtractionMatchingNumberTextfield
-        // .getText()));
-        // }catch (NumberFormatException ex) {
-        // new DisplayText(Messages.getString("errorOccured"), Messages
-        // .getString("invalid.response.extraction.number"));
-        // ex.printStackTrace();
-        // }
 
         try {
             Variables.getInstance().setSessionHandlingProduceDelayTimeInMillis(
@@ -1680,20 +1335,10 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                 Variables.getInstance().setCsvResponseDoingString(
                         this.csvResponseDoing.getProcessingString());
             }
-            // if (this.currentMatchReplaceSettings.isMatchReplaceActive()) {
-            // this
-            // .checkCSVdoingString(this.matchReplaceProcessingCsvstringTextfield
-            // .getText());
-            // this.currentMatchReplaceSettings
-            // .setProcessingOfReplacestringCsvstring(this.matchReplaceProcessingCsvstringTextfield
-            // .getText());
-            // }
             this.saveActualMatchReplaceSettingsIndex();
-            // this.dispose(); JFRAME TO JPANEL
 
         }catch (IllegalArgumentException ex) {
             new DisplayText(Messages.getString("errorOccured"), ex.getMessage());
-            // ex.printStackTrace();
         }
     }
 }
