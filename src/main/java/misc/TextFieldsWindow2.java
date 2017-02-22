@@ -555,13 +555,15 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         matchReplacePanel.add(this.ReplaceActionDropdownlist);
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(new JLabel(Messages.getString(
-                "number.iterator.increments.the.supplied.number.by.one.on.each.request.response.extraction.extracts.the.next.replace.string.from.responses.see.bottom")));
+                "number.iterator.increments.the.supplied.number.by.one.on.each.request." +
+                    "response.extraction.extracts.the.next.replace.string.from.responses.see.bottom")));
         matchReplacePanel.add(Box.createVerticalStrut(10));
         this.matchReplaceActionDropdownlist.setAlignmentX(Component.LEFT_ALIGNMENT);
         matchReplacePanel.add(this.matchReplaceActionDropdownlist);
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(new JLabel(Messages.getString(
-                "this.is.necessary.if.the.part.to.be.replaced.is.in.an.packed.area.defined.within.the.request.unpacking.tab")
+                "this.is.necessary.if.the.part.to.be.replaced.is.in.an.packed.area.defined." +
+                    "within.the.request.unpacking.tab")
                 + Messages.getString("see.help.tab.on.the.gunziper.tab.for.more.information")));
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(this.doRequestReplacementAfterUnpackingCheckbox);
@@ -580,7 +582,8 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         matchReplacePanel.add(this.matchReplaceProcessingCsvstringTextfield);
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(new JLabel(Messages.getString(
-                "this.will.prevent.any.replacement.of.the.marked.part.by.the.replace.string.but.only.does.a.processing.of.it")));
+                "this.will.prevent.any.replacement.of.the.marked.part.by.the.replace.string." +
+                    "but.only.does.a.processing.of.it")));
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(this.doProcessingsOnMarkedPartCheckbox);
         matchReplacePanel.add(Box.createVerticalStrut(10));
@@ -619,7 +622,8 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
                 "only.relevant.when.using.response.extraction.see.match.replace.part")));
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(new JLabel(Messages.getString(
-                "regex.containing.a.regex.group.marking.the.part.which.should.be.extracted.from.the.response.or.request")));
+                "regex.containing.a.regex.group.marking.the.part.which.should.be.extracted." +
+                    "from.the.response.or.request")));
         matchReplacePanel.add(Box.createVerticalStrut(10));
         this.regexForNewReplaceStringFromResponseExtraction.setAlignmentX(Component.LEFT_ALIGNMENT);
         matchReplacePanel.add(this.regexForNewReplaceStringFromResponseExtraction);
@@ -661,7 +665,8 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         matchReplacePanel.add(new JLabel(Messages.getString(
                 "defines.whether.the.scope.regex.is.applied.on.the.request.or.response")));
         matchReplacePanel.add(Box.createVerticalStrut(10));
-        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox.setAlignmentX(
+                Component.LEFT_ALIGNMENT);
         matchReplacePanel.add(this.matchReplaceResponseExtractionIsRegexMarkingRequestOrResponseJComboBox);
         matchReplacePanel.add(Box.createVerticalStrut(10));
         matchReplacePanel.add(this.matchIndicatesNonrelevanceForMatchreplaceResponseextraction);
@@ -1319,7 +1324,8 @@ public class TextFieldsWindow2 extends JTabbedPane implements ITab {
         }catch (NumberFormatException ex) {
             new DisplayText(
                     Messages.getString("errorOccured"),
-                    Messages.getString("invalid.number.for.a.delay.in.milliseconds.for.the.session.handling.action"));
+                    Messages.getString("invalid.number.for.a.delay.in.milliseconds." +
+                                           "for.the.session.handling.action"));
             ex.printStackTrace();
         }
 
