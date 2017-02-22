@@ -66,6 +66,9 @@ public class SearchPanel extends JPanel {
     // for the searchField group 1 match
     private final Highlighter.HighlightPainter matchHighlighter;
 
+    public SearchPanel(String explanationString){
+        this(null, null, false, explanationString);
+    }
 
     /**
      * 
