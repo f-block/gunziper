@@ -996,8 +996,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
 
         VariablesFunctions.init();
 
-        callbacks.setExtensionName("gunziper "
-                + Variables.getInstance().getVersionNumber());
+        callbacks.setExtensionName(Variables.getInstance().getExtensionName());
 
         callbacks.registerHttpListener(this);
 
