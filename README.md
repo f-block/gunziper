@@ -10,7 +10,7 @@ A plugin for [Burp Suite](https://portswigger.net/burp/) which enables you to:
 
 Pre-built JAR files are available on: http://coding.f-block.org/
 
-## Build form source
+## Build from source
 
 Build JAR files from source:
 
