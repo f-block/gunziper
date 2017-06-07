@@ -1,5 +1,5 @@
 group 'gunziper'
-version '0.9.8a'
+version '0.9.8b'
 
 apply plugin: 'java'
 
@@ -22,4 +22,5 @@ jar {
         attributes 'Implementation-Title': 'gunziper',
                    'Implementation-Version': version
     }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
