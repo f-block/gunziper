@@ -158,6 +158,7 @@ public class VariablesFunctions {
 
         if ((tempObj != null) && (tempObj instanceof Variables)) {
             Variables.setInstance((Variables) tempObj);
+            VariablesFunctions.variablesInstance = Variables.getInstance();
             VariablesFunctions.variablesInstance.setWorkingDirectory(new File(
                     filename).getParentFile().getAbsolutePath());
             return true;
