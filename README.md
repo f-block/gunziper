@@ -15,6 +15,9 @@ Pre-built JAR files are available on: http://coding.f-block.org/
 Build JAR files from source:
 
 ```bash
+wget https://github.com/f-block/gunziper/archive/master.zip
+unzip master.zip
+cd gunziper-master
 gradle jar
 ```
 
