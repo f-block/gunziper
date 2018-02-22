@@ -4,6 +4,7 @@ package burp;
 import intrudercomparer.GComparer;
 import intrudercomparer.IntruderSelectionWindow;
 
+import java.util.prefs.Preferences;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -783,7 +784,9 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
 
     public void executeCommandLineArguments(String[] args) {
 
-        for (int i = 0; i < (args.length - 1); i += 2) {
+        boolean basedir_set = false;
+
+            for (int i = 0; i < (args.length - 1); i += 2) {
             if (args[i].equalsIgnoreCase("restore")) {
                 System.out.println(Messages
                         .getString("trying.to.restore.saved.burp.file")
@@ -804,6 +807,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                 System.out.println(Messages.getString("setting.base.dir.to")
                         + ": " + args[i + 1]);
                 Variables.getInstance().setWorkingDirectory(args[i + 1]);
+                basedir_set = true;
                 System.out.println(Messages.getString("done"));
 
             }
@@ -849,6 +853,11 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                         .getString("no.recognized.action.could.be.identified"));
             }
 
+        }
+
+        if (!basedir_set) {
+            Variables.getInstance().setWorkingDirectory(Preferences.userRoot()
+                        .node("burp").get("workingdirectory", null));
         }
     }
 
