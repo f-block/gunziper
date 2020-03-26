@@ -721,7 +721,7 @@ public class Library {
                     || includeResponseHeader || includeResponseBody)
                     && includePocSeparators) {
                 out.write(Library.getBytearrayFromString(marker
-                        + " Request/Response Section " + marker + "\n"));
+                        + " Gunziper Request Section " + marker + "\n"));
             }
 
             String reqRespString = "";
@@ -748,7 +748,7 @@ public class Library {
                             .getMessageBody(message.getRequest()));
                     if ((includeResponseHeader || includeResponseBody)
                             && includePocSeparators) {
-                        reqRespString += "\n\n\n";
+                        reqRespString += "\n" + marker + " Gunziper Response Section " + marker + "\n";
                     }
                 }catch (NullPointerException e) {
                     // DO NOTHING
