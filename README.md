@@ -8,7 +8,7 @@ A plugin for [Burp Suite](https://portswigger.net/burp/) which enables you to:
 
 ## Pre-built JARs
 
-Pre-built JAR files are available on: http://coding.f-block.org/
+Pre-built JAR files are available in [Releases](https://github.com/f-block/gunziper/releases)
 
 ## Build from source
 
