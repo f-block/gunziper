@@ -4,23 +4,25 @@ version '0.9.8b'
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
+configurations.implementation.setCanBeResolved(true)
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile group: 'kxml2', name: 'kxml2', version: '2.3.0'
-    compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.7'
-    compile group: 'com.googlecode.java-diff-utils', name: 'diffutils', version: '1.3.0'
-    compile group: 'org.bitbucket.cowwoc', name: 'diff-match-patch', version: '1.1'
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    implementation group: 'kxml2', name: 'kxml2', version: '2.3.0'
+    implementation group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.7'
+    implementation group: 'com.googlecode.java-diff-utils', name: 'diffutils', version: '1.3.0'
+    implementation group: 'org.bitbucket.cowwoc', name: 'diff-match-patch', version: '1.1'
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Implementation-Title': 'gunziper',
-                   'Implementation-Version': version
+                   'Implementation-Version': archiveVersion
     }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
 }
