@@ -134,6 +134,7 @@ public class Variables implements Serializable {
     private boolean                              includeRequestBodyOnSaveAllSelectedItemsWithIncrementingNames                         = true;
     private boolean                              includeResponseBodyOnSaveAllSelectedItemsWithIncrementingNames                        = true;
     private boolean                              includeResponseHeaderOnSaveAllSelectedItemsWithIncrementingNames                      = true;
+    private boolean                              useMarkupOnSaveAllSelectedItemsWithIncrementingNames                                = true;
     private boolean                              includeUrlOnSaveAllSelectedItemsWithIncrementingNames                                 = true;
     private boolean                              includeMarkedRequestPartsOnSavePoc                                                    = true;
     private boolean                              includeMarkedResponsePartsOnSavePoc                                                   = true;
@@ -973,6 +974,13 @@ public class Variables implements Serializable {
         return this.includeUrlOnSaveAllSelectedItemsWithIncrementingNames;
     }
 
+    /**
+     * @return the useMarkupOnSaveAllSelectedItemsWithIncrementingNames
+     */
+    public boolean isUseMarkupOnSaveAllSelectedItemsWithIncrementingNames() {
+
+        return this.useMarkupOnSaveAllSelectedItemsWithIncrementingNames;
+    }
     /**
      * This variable is used to control whether or not the application logic
      * should proceed with

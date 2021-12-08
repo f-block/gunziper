@@ -1,5 +1,5 @@
 group 'gunziper'
-version '0.9.8b'
+version '0.9.9'
 
 apply plugin: 'java'
 

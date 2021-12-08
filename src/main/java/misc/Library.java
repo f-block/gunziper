@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Scanner;
+
 
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
@@ -476,6 +478,23 @@ public class Library {
         return null;
     }
 
+    public static String getStringCodeBlockFromBytearray(byte[] input) {
+
+        try {            
+            String fromBytearry = new String(input, "ISO-8859-1");
+            Scanner scanner = new Scanner(fromBytearry);
+            StringBuilder outBuild = new StringBuilder();
+            while (scanner.hasNextLine()){
+                outBuild.append("  " + scanner.nextLine() + "\n");
+            }
+            return outBuild.toString();
+
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getSubstring(String input, int substringLength) {
 
         String output = "";
@@ -620,7 +639,7 @@ public class Library {
             boolean includeMarkedRequestParts, boolean isParamSpecificFinding,
             String paramSpecificFindingParameters,
             boolean includeMarkedResponseParts, String regexForExclusion,
-            boolean appendToFile) throws IOException {
+            boolean appendToFile, boolean useMarkupStyle) throws IOException {
 
         FileOutputStream out = null;
         try {
@@ -637,6 +656,8 @@ public class Library {
 
 
             String marker = "=====";
+            String codeBlk = "::\n\n";
+            boolean codeBlkStarted = false;
 
             if (includeUrlInFirstLine) {
                 if (includePocSeparators) {
@@ -719,18 +740,32 @@ public class Library {
 
             if ((includeRequestHeader || includeRequestBody
                     || includeResponseHeader || includeResponseBody)
-                    && includePocSeparators) {
+                    && includePocSeparators && !useMarkupStyle) {
                 out.write(Library.getBytearrayFromString(marker
                         + " Gunziper Request Section " + marker + "\n"));
+            } else if ((includeRequestHeader || includeRequestBody
+                    || includeResponseHeader || includeResponseBody)
+                    && includePocSeparators && useMarkupStyle) {
+                out.write(Library.getBytearrayFromString(marker
+                        + " Gunziper Request/Response Section " + marker + "\n\n"));
+                out.write(Library.getBytearrayFromString("**Request:**" + "\n\n"));
             }
 
             String reqRespString = "";
 
             if (includeRequestHeader) {
                 try {
-                    reqRespString += Library.getStringFromBytearray(Library
-                            .getMessageHeader(message.getRequest()));
-
+                    if (!useMarkupStyle) {
+                        reqRespString += Library.getStringFromBytearray(Library
+                                .getMessageHeader(message.getRequest()));
+                    } else {
+                        if (!codeBlkStarted) {
+                            reqRespString += codeBlk;
+                            codeBlkStarted = true;
+                        }
+                        reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                                .getMessageHeader(message.getRequest()));
+                    }
                     if (!includeRequestBody
                             && (includeResponseHeader || includeResponseBody)
                             && includePocSeparators) {
@@ -744,11 +779,23 @@ public class Library {
 
             if (includeRequestBody) {
                 try {
-                    reqRespString += Library.getStringFromBytearray(Library
-                            .getMessageBody(message.getRequest()));
-                    if ((includeResponseHeader || includeResponseBody)
-                            && includePocSeparators) {
-                        reqRespString += "\n" + marker + " Gunziper Response Section " + marker + "\n";
+                    if (!useMarkupStyle) {
+                        reqRespString += Library.getStringFromBytearray(Library
+                                .getMessageBody(message.getRequest()));
+                        if ((includeResponseHeader || includeResponseBody)
+                                && includePocSeparators) {
+                            reqRespString += "\n" + marker + " Gunziper Response Section " + marker + "\n";
+                        }
+                    } else {
+                        if (!codeBlkStarted) {
+                            reqRespString += codeBlk;
+                            codeBlkStarted = true;
+                        }
+                        reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                                .getMessageBody(message.getRequest()));
+                        reqRespString += "\n";
+                        codeBlkStarted = false;
+                        reqRespString += "**Response:**" + "\n\n";
                     }
                 }catch (NullPointerException e) {
                     // DO NOTHING
@@ -757,17 +804,36 @@ public class Library {
 
             if (includeResponseBody || includeResponseHeader) {
                 try {
-                    if (includeResponseHeaderAndBody) {
-                        reqRespString += Library.getStringFromBytearray(message
-                                .getResponse());
-                    }
-                    else if (includeResponseHeader) {
-                        reqRespString += Library.getStringFromBytearray(Library
-                                .getMessageHeader(message.getResponse()));
-                    }
-                    else if (includeResponseBody) {
-                        reqRespString += Library.getStringFromBytearray(Library
-                                .getMessageBody(message.getResponse()));
+                    if (!useMarkupStyle){
+                        if (includeResponseHeaderAndBody) {
+                            reqRespString += Library.getStringFromBytearray(message
+                                    .getResponse());
+                        }
+                        else if (includeResponseHeader) {
+                            reqRespString += Library.getStringFromBytearray(Library
+                                    .getMessageHeader(message.getResponse()));
+                        }
+                        else if (includeResponseBody) {
+                            reqRespString += Library.getStringFromBytearray(Library
+                                    .getMessageBody(message.getResponse()));
+                        }
+                    } else {
+                        reqRespString += codeBlk;
+                        if (includeResponseHeaderAndBody) {                            
+                            reqRespString += Library.getStringCodeBlockFromBytearray(message
+                                    .getResponse());
+                            
+                        }
+                        else if (includeResponseHeader) {
+                            reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                                    .getMessageHeader(message.getResponse()));
+                        }
+                        else if (includeResponseBody) {
+                            reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                                    .getMessageBody(message.getResponse()));
+                        }
+                        //reqRespString += "\n";
+
                     }
 
                 }catch (NullPointerException e) {
