@@ -42,6 +42,7 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
     private final JCheckBox         includeUrlCheckbox;
     private final JCheckBox         includeResponsibleParametersCheckbox;
     private final JCheckBox         includePocSeparators;
+    private final JCheckBox         useMarkupStyleCheckbox;
     private final JCheckBox         includeMarkedRequestParts;
     private final JCheckBox         includeMarkedResponseParts;
     private final JCheckBox         incrementingFilenamesSaveCheckbox;
@@ -118,6 +119,9 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
                 Messages.getString("include.url.in.file"));
         this.includeUrlCheckbox.setSelected(Variables.getInstance()
                 .isIncludeUrlOnSaveAllSelectedItemsWithIncrementingNames());
+        this.useMarkupStyleCheckbox = new JCheckBox(Messages.getString("use.markup.style"));
+        this.useMarkupStyleCheckbox.setSelected(Variables.getInstance()
+                .isUseMarkupOnSaveAllSelectedItemsWithIncrementingNames());
         this.includeMarkedRequestParts = new JCheckBox(
                 Messages.getString("include.marked.request.parts.in.file"));
         this.includeMarkedRequestParts.setSelected(Variables.getInstance()
@@ -378,7 +382,9 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
                                 temp.appendToPocFileCheckbox
                                 .isSelected(), uniqFlags,
                                 temp.excludeTheseParamsFromComparison
-                                .getText());
+                                .getText(),
+                                temp.useMarkupStyleCheckbox
+                                .isSelected());
 
                         JOptionPane.showMessageDialog(null,
                                 Messages.getString("done.saving"),
@@ -470,6 +476,7 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
         basicSettingsContainer.add(this.includeRequestBodyCheckbox);
         basicSettingsContainer.add(this.includeResponseHeaderCheckbox);
         basicSettingsContainer.add(this.includeResponseBodyCheckbox);
+        basicSettingsContainer.add(this.useMarkupStyleCheckbox);
         this.mainContentPanel.add(basicSettingsContainer);
         this.mainContentPanel.add(new JLabel(" "));
 

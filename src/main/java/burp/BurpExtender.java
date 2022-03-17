@@ -162,7 +162,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
             boolean includeMarkedRequestParts,
             boolean includeMarkedResponseParts, String regexForExclusion,
             boolean useIncrementingFilenames, boolean appendToFile,
-            ArrayList<Integer> uniqFlags, String asvExcludedParametersString) {
+            ArrayList<Integer> uniqFlags, String asvExcludedParametersString,
+            boolean useMarkupStyle) {
 
         File curFile = null;
         MyFileChooser fc = null;
@@ -319,7 +320,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                                             isParamSpecificFinding,
                                             paramSpecificFindingParameter,
                                             includeMarkedResponseParts,
-                                            regexForExclusion, appendToFile);
+                                            regexForExclusion, appendToFile,
+                                            useMarkupStyle);
                                 }
                             }
 
@@ -345,7 +347,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                                         isParamSpecificFinding,
                                         paramSpecificFindingParameter,
                                         includeMarkedResponseParts,
-                                        regexForExclusion, appendToFile);
+                                        regexForExclusion, appendToFile,
+                                        useMarkupStyle);
                             }
 
                         }
@@ -357,7 +360,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                                     includeUrl, includeResponsibleParameters,
                                     includeMarkedRequestParts, false, null,
                                     includeMarkedResponseParts,
-                                    regexForExclusion, appendToFile);
+                                    regexForExclusion, appendToFile,
+                                    useMarkupStyle);
                         }
 
 
