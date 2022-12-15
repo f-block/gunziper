@@ -478,7 +478,7 @@ public class Library {
         return null;
     }
 
-    public static String getStringCodeBlockFromBytearray(byte[] input) {
+    public static String getStringRichCodeBlockFromBytearray(byte[] input) {
 
         try {            
             String fromBytearry = new String(input, "ISO-8859-1");
@@ -486,6 +486,23 @@ public class Library {
             StringBuilder outBuild = new StringBuilder();
             while (scanner.hasNextLine()){
                 outBuild.append("  " + scanner.nextLine() + "\n");
+            }
+            return outBuild.toString();
+
+        }catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getStringMarkupCodeBlockFromBytearray(byte[] input) {
+
+        try {            
+            String fromBytearry = new String(input, "ISO-8859-1");
+            Scanner scanner = new Scanner(fromBytearry);
+            StringBuilder outBuild = new StringBuilder();
+            while (scanner.hasNextLine()){
+                outBuild.append("" + scanner.nextLine() + "\n");
             }
             return outBuild.toString();
 
@@ -639,7 +656,7 @@ public class Library {
             boolean includeMarkedRequestParts, boolean isParamSpecificFinding,
             String paramSpecificFindingParameters,
             boolean includeMarkedResponseParts, String regexForExclusion,
-            boolean appendToFile, boolean useMarkupStyle) throws IOException {
+            boolean appendToFile, boolean useRichStyle, boolean useMarkdownStyle) throws IOException {
 
         FileOutputStream out = null;
         try {
@@ -657,6 +674,7 @@ public class Library {
 
             String marker = "=====";
             String codeBlk = "::\n\n";
+            String codeBlkMarkdown = "```\n";
             boolean codeBlkStarted = false;
 
             if (includeUrlInFirstLine) {
@@ -740,12 +758,12 @@ public class Library {
 
             if ((includeRequestHeader || includeRequestBody
                     || includeResponseHeader || includeResponseBody)
-                    && includePocSeparators && !useMarkupStyle) {
+                    && includePocSeparators && (!useRichStyle && !useMarkdownStyle)) {
                 out.write(Library.getBytearrayFromString(marker
                         + " Gunziper Request Section " + marker + "\n"));
             } else if ((includeRequestHeader || includeRequestBody
                     || includeResponseHeader || includeResponseBody)
-                    && includePocSeparators && useMarkupStyle) {
+                    && includePocSeparators && (useRichStyle || useMarkdownStyle)) {
                 out.write(Library.getBytearrayFromString(marker
                         + " Gunziper Request/Response Section " + marker + "\n\n"));
                 out.write(Library.getBytearrayFromString("**Request:**" + "\n\n"));
@@ -755,15 +773,23 @@ public class Library {
 
             if (includeRequestHeader) {
                 try {
-                    if (!useMarkupStyle) {
+                    if (!useRichStyle && !useMarkdownStyle) {
                         reqRespString += Library.getStringFromBytearray(Library
                                 .getMessageHeader(message.getRequest()));
-                    } else {
+                    } else if (useRichStyle) {
                         if (!codeBlkStarted) {
                             reqRespString += codeBlk;
                             codeBlkStarted = true;
                         }
-                        reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                        reqRespString += Library.getStringRichCodeBlockFromBytearray(Library
+                                .getMessageHeader(message.getRequest()));
+                    // Markdown Style
+                    } else {
+                        if (!codeBlkStarted) {
+                            reqRespString += codeBlkMarkdown;
+                            codeBlkStarted = true;
+                        }
+                        reqRespString += Library.getStringMarkupCodeBlockFromBytearray(Library
                                 .getMessageHeader(message.getRequest()));
                     }
                     if (!includeRequestBody
@@ -779,20 +805,32 @@ public class Library {
 
             if (includeRequestBody) {
                 try {
-                    if (!useMarkupStyle) {
+                    if (!useRichStyle && !useMarkdownStyle) {
                         reqRespString += Library.getStringFromBytearray(Library
                                 .getMessageBody(message.getRequest()));
                         if ((includeResponseHeader || includeResponseBody)
                                 && includePocSeparators) {
                             reqRespString += "\n" + marker + " Gunziper Response Section " + marker + "\n";
                         }
-                    } else {
+                    } else if (useRichStyle) {
                         if (!codeBlkStarted) {
                             reqRespString += codeBlk;
                             codeBlkStarted = true;
                         }
-                        reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                        reqRespString += Library.getStringRichCodeBlockFromBytearray(Library
                                 .getMessageBody(message.getRequest()));
+                        reqRespString += "\n";
+                        codeBlkStarted = false;
+                        reqRespString += "**Response:**" + "\n\n";
+                    // Markdown Style
+                    } else {
+                        if (!codeBlkStarted) {
+                            reqRespString += codeBlkMarkdown;
+                            codeBlkStarted = true;
+                        }
+                        reqRespString += Library.getStringMarkupCodeBlockFromBytearray(Library
+                                .getMessageBody(message.getRequest()));
+                        reqRespString += codeBlkMarkdown;
                         reqRespString += "\n";
                         codeBlkStarted = false;
                         reqRespString += "**Response:**" + "\n\n";
@@ -804,7 +842,7 @@ public class Library {
 
             if (includeResponseBody || includeResponseHeader) {
                 try {
-                    if (!useMarkupStyle){
+                    if (!useRichStyle && !useMarkdownStyle){
                         if (includeResponseHeaderAndBody) {
                             reqRespString += Library.getStringFromBytearray(message
                                     .getResponse());
@@ -817,23 +855,40 @@ public class Library {
                             reqRespString += Library.getStringFromBytearray(Library
                                     .getMessageBody(message.getResponse()));
                         }
-                    } else {
+                    } else if (useRichStyle) {
                         reqRespString += codeBlk;
                         if (includeResponseHeaderAndBody) {                            
-                            reqRespString += Library.getStringCodeBlockFromBytearray(message
+                            reqRespString += Library.getStringRichCodeBlockFromBytearray(message
                                     .getResponse());
                             
                         }
                         else if (includeResponseHeader) {
-                            reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                            reqRespString += Library.getStringRichCodeBlockFromBytearray(Library
                                     .getMessageHeader(message.getResponse()));
                         }
                         else if (includeResponseBody) {
-                            reqRespString += Library.getStringCodeBlockFromBytearray(Library
+                            reqRespString += Library.getStringRichCodeBlockFromBytearray(Library
                                     .getMessageBody(message.getResponse()));
                         }
                         //reqRespString += "\n";
-
+                    // Markdown Style
+                    } else {
+                        reqRespString += codeBlkMarkdown;
+                        if (includeResponseHeaderAndBody) {                            
+                            reqRespString += Library.getStringMarkupCodeBlockFromBytearray(message
+                                    .getResponse());
+                            
+                        }
+                        else if (includeResponseHeader) {
+                            reqRespString += Library.getStringMarkupCodeBlockFromBytearray(Library
+                                    .getMessageHeader(message.getResponse()));
+                        }
+                        else if (includeResponseBody) {
+                            reqRespString += Library.getStringMarkupCodeBlockFromBytearray(Library
+                                    .getMessageBody(message.getResponse()));
+                        }
+                        //reqRespString += "\n";
+                        reqRespString += codeBlkMarkdown;
                     }
 
                 }catch (NullPointerException e) {

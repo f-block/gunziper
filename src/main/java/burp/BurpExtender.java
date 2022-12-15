@@ -163,7 +163,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
             boolean includeMarkedResponseParts, String regexForExclusion,
             boolean useIncrementingFilenames, boolean appendToFile,
             ArrayList<Integer> uniqFlags, String asvExcludedParametersString,
-            boolean useMarkupStyle) {
+            boolean useRichStyle, boolean useMarkdownStyle) {
 
         File curFile = null;
         MyFileChooser fc = null;
@@ -321,7 +321,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                                             paramSpecificFindingParameter,
                                             includeMarkedResponseParts,
                                             regexForExclusion, appendToFile,
-                                            useMarkupStyle);
+                                            useRichStyle, useMarkdownStyle);
                                 }
                             }
 
@@ -348,7 +348,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                                         paramSpecificFindingParameter,
                                         includeMarkedResponseParts,
                                         regexForExclusion, appendToFile,
-                                        useMarkupStyle);
+                                        useRichStyle, useMarkdownStyle);
                             }
 
                         }
@@ -361,7 +361,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory,
                                     includeMarkedRequestParts, false, null,
                                     includeMarkedResponseParts,
                                     regexForExclusion, appendToFile,
-                                    useMarkupStyle);
+                                    useRichStyle, useMarkdownStyle);
                         }
 
 
