@@ -42,7 +42,8 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
     private final JCheckBox         includeUrlCheckbox;
     private final JCheckBox         includeResponsibleParametersCheckbox;
     private final JCheckBox         includePocSeparators;
-    private final JCheckBox         useMarkupStyleCheckbox;
+    private final JCheckBox         useRichStyleCheckbox;
+    private final JCheckBox         useMarkdownStyleCheckbox;
     private final JCheckBox         includeMarkedRequestParts;
     private final JCheckBox         includeMarkedResponseParts;
     private final JCheckBox         incrementingFilenamesSaveCheckbox;
@@ -119,9 +120,12 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
                 Messages.getString("include.url.in.file"));
         this.includeUrlCheckbox.setSelected(Variables.getInstance()
                 .isIncludeUrlOnSaveAllSelectedItemsWithIncrementingNames());
-        this.useMarkupStyleCheckbox = new JCheckBox(Messages.getString("use.markup.style"));
-        this.useMarkupStyleCheckbox.setSelected(Variables.getInstance()
-                .isUseMarkupOnSaveAllSelectedItemsWithIncrementingNames());
+        this.useRichStyleCheckbox = new JCheckBox(Messages.getString("use.richtext.style"));
+        this.useRichStyleCheckbox.setSelected(Variables.getInstance()
+                .isUseRichtextOnSaveAllSelectedItemsWithIncrementingNames());
+        this.useMarkdownStyleCheckbox = new JCheckBox(Messages.getString("use.markdown.style"));
+        this.useMarkdownStyleCheckbox.setSelected(Variables.getInstance()
+                .isUseMarkdownOnSaveAllSelectedItemsWithIncrementingNames());
         this.includeMarkedRequestParts = new JCheckBox(
                 Messages.getString("include.marked.request.parts.in.file"));
         this.includeMarkedRequestParts.setSelected(Variables.getInstance()
@@ -383,8 +387,9 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
                                 .isSelected(), uniqFlags,
                                 temp.excludeTheseParamsFromComparison
                                 .getText(),
-                                temp.useMarkupStyleCheckbox
-                                .isSelected());
+                                temp.useRichStyleCheckbox
+                                .isSelected(),
+                                temp.useMarkdownStyleCheckbox.isSelected());
 
                         JOptionPane.showMessageDialog(null,
                                 Messages.getString("done.saving"),
@@ -476,7 +481,8 @@ public class SaveAllReqsRespsSelectionWindow extends JFrame {
         basicSettingsContainer.add(this.includeRequestBodyCheckbox);
         basicSettingsContainer.add(this.includeResponseHeaderCheckbox);
         basicSettingsContainer.add(this.includeResponseBodyCheckbox);
-        basicSettingsContainer.add(this.useMarkupStyleCheckbox);
+        basicSettingsContainer.add(this.useRichStyleCheckbox);
+        basicSettingsContainer.add(this.useMarkdownStyleCheckbox);
         this.mainContentPanel.add(basicSettingsContainer);
         this.mainContentPanel.add(new JLabel(" "));
 

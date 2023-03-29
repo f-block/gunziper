@@ -134,7 +134,8 @@ public class Variables implements Serializable {
     private boolean                              includeRequestBodyOnSaveAllSelectedItemsWithIncrementingNames                         = true;
     private boolean                              includeResponseBodyOnSaveAllSelectedItemsWithIncrementingNames                        = true;
     private boolean                              includeResponseHeaderOnSaveAllSelectedItemsWithIncrementingNames                      = true;
-    private boolean                              useMarkupOnSaveAllSelectedItemsWithIncrementingNames                                = true;
+    private boolean                              useRichtextOnSaveAllSelectedItemsWithIncrementingNames                                = true;
+    private boolean                              useMarkdownOnSaveAllSelectedItemsWithIncrementingNames                                = false;
     private boolean                              includeUrlOnSaveAllSelectedItemsWithIncrementingNames                                 = true;
     private boolean                              includeMarkedRequestPartsOnSavePoc                                                    = true;
     private boolean                              includeMarkedResponsePartsOnSavePoc                                                   = true;
@@ -975,11 +976,19 @@ public class Variables implements Serializable {
     }
 
     /**
-     * @return the useMarkupOnSaveAllSelectedItemsWithIncrementingNames
+     * @return the useRichtextOnSaveAllSelectedItemsWithIncrementingNames
      */
-    public boolean isUseMarkupOnSaveAllSelectedItemsWithIncrementingNames() {
+    public boolean isUseRichtextOnSaveAllSelectedItemsWithIncrementingNames() {
 
-        return this.useMarkupOnSaveAllSelectedItemsWithIncrementingNames;
+        return this.useRichtextOnSaveAllSelectedItemsWithIncrementingNames;
+    }
+
+    /**
+     * @return the useMarkdownOnSaveAllSelectedItemsWithIncrementingNames
+     */
+    public boolean isUseMarkdownOnSaveAllSelectedItemsWithIncrementingNames() {
+
+        return this.useMarkdownOnSaveAllSelectedItemsWithIncrementingNames;
     }
     /**
      * This variable is used to control whether or not the application logic
